@@ -26,7 +26,7 @@
   (begin
     (asserts! (> amount u0) ERR-INVALID-AMOUNT)
 
-    (try! (stx-transfer? amount tx-sender (as-contract tx-sender)))
+    (try! (stx-transfer? amount tx-sender (contract-caller)))
 
     (let (
           (current (default-to u0 (get balance (map-get? pool-balances { user: tx-sender }))))
@@ -55,7 +55,7 @@
     (begin
       (asserts! (>= current amount) ERR-INSUFFICIENT-BALANCE)
 
-      (try! (stx-transfer? amount (as-contract tx-sender) tx-sender))
+      (try! (stx-transfer? amount (contract-caller) tx-sender))
 
       (map-set pool-balances
         { user: tx-sender }
@@ -82,7 +82,7 @@
     (begin
       (asserts! (> reward u0) ERR-INVALID-AMOUNT)
 
-      (try! (stx-transfer? reward (as-contract tx-sender) tx-sender))
+      (try! (stx-transfer? reward (contract-caller) tx-sender))
 
       (print {
         event: "yield-claimed",
